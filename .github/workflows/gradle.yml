@@ -1,0 +1,37 @@
+name: Java CI with Gradle
+
+on:
+  push:
+    branches: [ '**' ]
+  pull_request:
+    branches: [ '**' ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 22
+        uses: actions/setup-java@v4.3.0
+        with:
+          java-version: '22'
+          distribution: 'temurin'
+
+      - name: Make Gradle wrapper executable
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew shadowJar
+
+      - name: Upload Modules Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ChromaMC-CHub-Artifact
+          path: build/libs/CloudNet-DCBot-Module-*.jar
